@@ -76,7 +76,7 @@ export function installFetchWrapper(
 	return st;
 }
 
-export default function llmProxy(pi: ExtensionAPI): void {
+export default function providerProxy(pi: ExtensionAPI): void {
 	const watcher = new ConfigWatcher(configPath());
 	const customHosts = modelsJsonHosts();
 	const state = installFetchWrapper(watcher, customHosts);
