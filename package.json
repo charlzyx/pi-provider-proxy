@@ -1,0 +1,32 @@
+{
+    "name": "pi-llm-proxy",
+    "version": "0.1.0",
+    "description": "Per-provider HTTP proxy for the Pi coding agent: one proxy URL plus a provider list whose model and auth requests route through it.",
+    "type": "module",
+    "license": "MIT",
+    "main": "index.ts",
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/example/pi-llm-proxy.git"
+    },
+    "keywords": [
+        "pi",
+        "pi-coding-agent",
+        "extension",
+        "proxy",
+        "provider"
+    ],
+    "scripts": {
+        "check": "tsc --noEmit -p .",
+        "test": "node --test test/*.test.ts"
+    },
+    "engines": {
+        "node": ">=22.19"
+    },
+    "dependencies": {},
+    "devDependencies": {
+        "@earendil-works/pi-coding-agent": "1.0.2",
+        "@types/node": "^26.6.4",
+        "typescript": "^5.9.3"
+    }
+}
