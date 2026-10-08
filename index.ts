@@ -1,5 +1,5 @@
 /**
- * pi-llm-proxy — per-provider HTTP proxy for the Pi coding agent, ported from
+ * pi-provider-proxy — per-provider HTTP proxy for the Pi coding agent, ported from
  * dshwork/packages/llm-provider-proxy.
  *
  * Owns the whole transport-proxy layer: a zero-dependency HTTP CONNECT tunnel
@@ -10,8 +10,8 @@
  * passes through untouched — this is not a global proxy. Loopback hosts are
  * never proxied, so local gateways keep working.
  *
- * Config (hot-reloadable, `~/.pi/agent/llm-proxy.json`, or the file named by
- * `PI_LLM_PROXY_CONFIG`):
+ * Config (hot-reloadable, `~/.pi/agent/provider-proxy.json`, or the file named by
+ * `PI_PROVIDER_PROXY_CONFIG`):
  *
  * ```json
  * {
@@ -22,7 +22,7 @@
  * ```
  *
  * Install: symlink this repo into Pi's extension directory, e.g.
- * `ln -s /Users/you/github/pi-llm-proxy ~/.pi/agent/extensions/pi-llm-proxy`, or
+ * `ln -s /Users/you/github/pi-provider-proxy ~/.pi/agent/extensions/pi-provider-proxy`, or
  * add `src`-style entry to `extensions` in settings.json — the repo root is the
  * extension: `index.ts` entry plus sibling modules.
  */
@@ -34,7 +34,7 @@ import { isLoopbackHost, parseProxyUrl, proxiedFetch } from "./proxy.ts";
 
 /** State of the installed wrapper, shared by the command handler. */
 interface WrapperState {
-	/** Hostname of the request being inspected right now (for /llm-proxy). */
+	/** Hostname of the request being inspected right now (for /provider-proxy). */
 	originalFetch: typeof globalThis.fetch;
 	/** Number of requests routed through the proxy since install. */
 	proxiedCount: number;
@@ -81,13 +81,13 @@ export default function llmProxy(pi: ExtensionAPI): void {
 	const customHosts = modelsJsonHosts();
 	const state = installFetchWrapper(watcher, customHosts);
 
-	pi.registerCommand("llm-proxy", {
-		description: "Show pi-llm-proxy routing status",
+	pi.registerCommand("provider-proxy", {
+		description: "Show pi-provider-proxy routing status",
 		handler: async (_args, ctx) => {
 			const config = watcher.get();
 			const index = buildHostIndex(config, customHosts);
 			const lines = [
-				`pi-llm-proxy: proxy ${config.proxy || "(not configured)"}`,
+				`pi-provider-proxy: proxy ${config.proxy || "(not configured)"}`,
 				`providers: ${config.providers.join(", ") || "(none)"}`,
 				`hosts: ${[...index.keys()].sort().join(", ") || "(none)"}`,
 				`requests: ${state.proxiedCount} proxied, ${state.passthroughCount} passthrough`,

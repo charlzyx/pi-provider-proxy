@@ -6,8 +6,8 @@ import { describe, it } from "node:test";
 import { ConfigWatcher, configPath, loadConfig, validateConfig } from "../config.ts";
 
 function tempConfig(content: string): string {
-	const dir = mkdtempSync(path.join(tmpdir(), "pi-llm-proxy-"));
-	const file = path.join(dir, "llm-proxy.json");
+	const dir = mkdtempSync(path.join(tmpdir(), "pi-provider-proxy-"));
+	const file = path.join(dir, "provider-proxy.json");
 	writeFileSync(file, content);
 	return file;
 }
@@ -63,7 +63,7 @@ describe("ConfigWatcher", () => {
 	});
 
 	it("falls back to defaults when the file is missing", () => {
-		const watcher = new ConfigWatcher(path.join(tmpdir(), "pi-llm-proxy-missing.json"));
+		const watcher = new ConfigWatcher(path.join(tmpdir(), "pi-provider-proxy-missing.json"));
 		assert.deepEqual(watcher.get(), {
 			proxy: "http://127.0.0.1:7897",
 			providers: ["openai-codex"],
@@ -84,12 +84,12 @@ describe("ConfigWatcher", () => {
 });
 
 describe("configPath", () => {
-	it("honours PI_LLM_PROXY_CONFIG", () => {
-		assert.equal(configPath({ PI_LLM_PROXY_CONFIG: "/x/y.json" }), "/x/y.json");
+	it("honours PI_PROVIDER_PROXY_CONFIG", () => {
+		assert.equal(configPath({ PI_PROVIDER_PROXY_CONFIG: "/x/y.json" }), "/x/y.json");
 	});
 
-	it("defaults to ~/.pi/agent/llm-proxy.json", () => {
+	it("defaults to ~/.pi/agent/provider-proxy.json", () => {
 		const resolved = configPath({});
-		assert.match(resolved, /\.pi[/\\]agent[/\\]llm-proxy\.json$/);
+		assert.match(resolved, /\.pi[/\\]agent[/\\]provider-proxy\.json$/);
 	});
 });

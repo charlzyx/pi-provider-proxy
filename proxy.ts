@@ -1,6 +1,6 @@
 /**
  * Zero-dependency HTTP CONNECT tunnel plus a fetch-compatible transport,
- * ported from dshwork/packages/llm-provider-proxy.
+ * ported from dshwork/packages/provider-proxy.
  *
  * Node's global fetch ignores `http_proxy` / `https_proxy` env vars, and some
  * provider endpoints are region-blocked: requests whose host belongs to a
@@ -22,7 +22,7 @@ export function parseProxyUrl(value: unknown): URL | undefined {
 	const url = new URL(text);
 	if (url.protocol !== "http:" && url.protocol !== "https:") {
 		throw new Error(
-			`pi-llm-proxy: unsupported proxy scheme "${url.protocol}" in "${text}"; use an HTTP proxy (e.g. Clash/ClashX)`,
+			`pi-provider-proxy: unsupported proxy scheme "${url.protocol}" in "${text}"; use an HTTP proxy (e.g. Clash/ClashX)`,
 		);
 	}
 	return url;

@@ -1,8 +1,8 @@
 /**
- * Configuration for pi-llm-proxy.
+ * Configuration for pi-provider-proxy.
  *
- * Loaded from `~/.pi/agent/llm-proxy.json` (or the file named by
- * `PI_LLM_PROXY_CONFIG`). The file is re-read whenever its mtime changes, so
+ * Loaded from `~/.pi/agent/provider-proxy.json` (or the file named by
+ * `PI_PROVIDER_PROXY_CONFIG`). The file is re-read whenever its mtime changes, so
  * edits hot-reload without restarting Pi.
  */
 
@@ -25,29 +25,29 @@ const DEFAULT_CONFIG: ProxyConfig = {
 	hosts: [],
 };
 
-/** Where the config file lives: $PI_LLM_PROXY_CONFIG, else the agent dir. */
+/** Where the config file lives: $PI_PROVIDER_PROXY_CONFIG, else the agent dir. */
 export function configPath(env: NodeJS.ProcessEnv = process.env): string {
-	const override = env.PI_LLM_PROXY_CONFIG;
+	const override = env.PI_PROVIDER_PROXY_CONFIG;
 	if (override) return override;
-	return path.join(os.homedir(), ".pi", "agent", "llm-proxy.json");
+	return path.join(os.homedir(), ".pi", "agent", "provider-proxy.json");
 }
 
 /** Validate one parsed config object; throws with a readable message. */
 export function validateConfig(value: unknown): ProxyConfig {
 	if (value === null || typeof value !== "object" || Array.isArray(value)) {
-		throw new Error("pi-llm-proxy: config must be a JSON object");
+		throw new Error("pi-provider-proxy: config must be a JSON object");
 	}
 	const raw = value as Record<string, unknown>;
 	if (raw.proxy !== undefined && typeof raw.proxy !== "string") {
-		throw new Error("pi-llm-proxy: config.proxy must be a string");
+		throw new Error("pi-provider-proxy: config.proxy must be a string");
 	}
 	const providers = raw.providers ?? DEFAULT_CONFIG.providers;
 	const hosts = raw.hosts ?? DEFAULT_CONFIG.hosts;
 	if (!Array.isArray(providers) || providers.some((p) => typeof p !== "string")) {
-		throw new Error("pi-llm-proxy: config.providers must be an array of strings");
+		throw new Error("pi-provider-proxy: config.providers must be an array of strings");
 	}
 	if (!Array.isArray(hosts) || hosts.some((h) => typeof h !== "string")) {
-		throw new Error("pi-llm-proxy: config.hosts must be an array of strings");
+		throw new Error("pi-provider-proxy: config.hosts must be an array of strings");
 	}
 	return {
 		proxy: raw.proxy ?? DEFAULT_CONFIG.proxy,
